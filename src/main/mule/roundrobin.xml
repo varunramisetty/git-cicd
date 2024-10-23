@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f5809d22-5828-4595-bfe9-88b042654bf2" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<flow name="roundrobinFlow" doc:id="ec2633f6-e269-4c3e-b93d-c21d9d49848c" >
+		<http:listener doc:name="Listener" doc:id="435a95de-e50a-44fd-8de8-107cdc037b31" config-ref="HTTP_Listener_config" path="/round"/>
+		<round-robin doc:name="Round Robin" doc:id="a1ab37a1-1375-410e-bb98-998649576244">
+			<route>
+				<set-variable value="Jeevan" doc:name="Developer" doc:id="197c43fb-2ed1-4acb-ba11-47f201820f1e" variableName="Developer" />
+				<logger level="INFO" doc:name="Logger" doc:id="cccd89e6-5991-46d6-b15d-58efc9ac997a" message="#[vars.Developer]" />
+			</route>
+			<route>
+				<set-variable value="Sathwik" doc:name="QA" doc:id="fe2ed5bd-15c8-4fc2-9d93-37c6d9f5dbaf" variableName="QA" />
+				<logger level="INFO" doc:name="Logger" doc:id="2cbf40cb-86ce-4071-8024-eab48d207669" message="#[vars.QA]" />
+			</route>
+			<route>
+				<set-variable value="Hemanth" doc:name="Developer" doc:id="f5a96a05-385f-42ca-9ed8-7a80fcc7677b" variableName="Developer" />
+				<logger level="INFO" doc:name="Logger" doc:id="0f26b6c6-4928-4adc-a1f7-0725518cb54f" message="#[vars.Developer]" />
+			</route>
+			<route>
+				<set-variable value="Madhav" doc:name="JavaDeveloper" doc:id="73b92c68-52fa-4d27-91fe-bd0860a0f82c" variableName="JavaDeveloper" />
+				<logger level="INFO" doc:name="Logger" doc:id="a8a2e680-d93e-4c9c-b6fa-1040d07e67a6" message="#[vars.JavaDeveloper]" />
+			</route>
+			<route>
+				<set-variable value="Javed" doc:name="QA" doc:id="3e9bf21c-4aa4-47f2-925a-c96b50fa59f3" variableName="QA" />
+				<logger level="INFO" doc:name="Logger" doc:id="56f30459-4586-44d3-a82d-1eb16d435720" message="#[vars.QA]" />
+			</route>
+			<route>
+				<set-variable value="Chaitanya" doc:name="Architect" doc:id="6c7dc56a-698f-4467-ae43-b0d194f05e63" variableName="Architect" />
+				<logger level="INFO" doc:name="Logger" doc:id="ccf7a1ba-0181-4697-986d-410bf40b9ef9" message="#[vars.Architect]" />
+			</route>
+			<route>
+				<set-variable value="Sai" doc:name="Developer" doc:id="da293abc-da37-41a0-b33d-45d4494c74bd" variableName="Developer" />
+				<logger level="INFO" doc:name="Logger" doc:id="bda62bc4-11c3-48b0-954a-ce3595f95307" message="#[vars.Developer]" />
+			</route>
+		</round-robin>
+		<logger level="INFO" doc:name="Logger" doc:id="adbc8e84-96fe-4cfb-80c0-f8e9deeac775" message="#[vars.Developer]" />
+		<ee:transform doc:name="Transform Message" doc:id="e3c92a79-2702-4e6f-9aad-3830305d277d" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.Developer ++ " " ++ vars.QA ++ " " ++ vars.Architect]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
